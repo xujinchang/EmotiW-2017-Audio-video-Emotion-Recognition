@@ -22,7 +22,11 @@ caffe.set_device(2)
 #MODEL_PATH = '../models/vgg_19_finetue_fer2013_iter_30000.caffemodel'
 
 MODEL_DEF = '/home/xujinchang/share/caffe-center-loss/emotiw/vgg/deploy/deploy_vgg_fer16.prototxt'
-MODEL_PATH = './models_xu/vgg_face16_finetue2w_video_iter_20000.caffemodel'
+MODEL_PATH = 'models_xu/vgg_afew_face_val1_iter_450.caffemodel'
+#MODEL_PATH = './models_xu/vgg_afew_face16_0_1_2_single_iter_800.caffemodel'
+#MODEL_PATH = './models_xu/vgg_afew_face16_0_1_2__iter_2000.caffemodel'
+# MODEL_DEF = '/home/xujinchang/share/caffe-center-loss/emotiw/afew/resnet/depoly/deploy_res10.prototxt'
+# MODEL_PATH = './models_xu/res10_face_video_0_iter_30000.caffemodel'
 
 mean = np.array((104.0, 117.0, 123.0), dtype=np.float32)
 SIZE = 250
@@ -36,7 +40,7 @@ def predict(the_net,image):
     tmp_input = cv2.imread(image)
     tmp_input = cv2.resize(tmp_input,(SIZE,SIZE))
     tmp_input = tmp_input[13:13+224,13:13+224]
-    #tmp_input = np.subtract(tmp_input,mean)
+    tmp_input = np.subtract(tmp_input,mean)
     tmp_input = tmp_input.transpose((2, 0, 1))
     tmp_input = np.require(tmp_input, dtype=np.float32)
   except Exception as e:
@@ -46,16 +50,16 @@ def predict(the_net,image):
   the_net.reshape()
   the_net.blobs['data'].data[...] = tmp_input
   the_net.forward()
-  scores = copy.deepcopy(the_net.blobs['fc7'].data)
+  scores = copy.deepcopy(the_net.blobs['fc6'].data)
   return scores
 
 if __name__=="__main__":
   # img_dir = "/localSSD/hezhiqun/image_quality/pick_result/blur/"
   #img_dir = "/home/xujinchang/share/AGG/data/test1/"
   #f = open("/home/xujinchang/share/AGG/Liveness/detection/sort_testcodafinal","rb")
-  f = open("","rb")
-  fp = open("vgg16_fc7.fea","w")
-  fp2 = open("afew_train_label.fea","w")
+  f = open("./data/AFEW/AFEW_TrainVal/our_rest_val.txt","rb")
+  fp = open("./lstm_afew_face/our_val2_vgg16_fc6.fea","w")
+  fp2 = open("./lstm_afew_face/our_val2_label.fea","w")
   net = caffe.Net(MODEL_DEF, MODEL_PATH, caffe.TEST)
 
   start_time = time.time()
@@ -70,7 +74,8 @@ if __name__=="__main__":
     feature = np.require(fea)# (4096,1)
     X_features.append(feature)
     count = count + 1
-    y_label.append(line[1])
+    if count % 16 == 0:
+      y_label.append(line[1])
 
   print len(X_features)
   print len(y_label)

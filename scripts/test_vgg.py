@@ -17,7 +17,7 @@ import copy
 import pickle
 
 caffe.set_mode_gpu()
-caffe.set_device(0)
+caffe.set_device(2)
 
 #MODEL_DEF = "../deploy/VGG_fc6_deploy.prototxt"
 #MODEL_PATH = "../model/VGG/dan_vgg_iter_50000.caffemodel"
@@ -29,8 +29,9 @@ caffe.set_device(0)
 #MODEL_PATH2 = '/home/xujinchang/share/project/transfor_learning/transfer-caffe/model_xu/JAN_res50_iter_100000.caffemodel'
 
 MODEL_DEF = '/home/xujinchang/share/caffe-center-loss/emotiw/vgg/deploy/deploy_vgg_fer16.prototxt'
+MODEL_PATH = 'models_xu/vgg_afew_face16_0_1_2_finetue2w_fer2013_iter_15000.caffemodel'
 #MODEL_PATH = './models_xu/vgg_face19_finetue2w_fer2013_iter_20000.caffemodel'
-MODEL_PATH = 'models_xu/vgg_face16_0_1_2_finetue2w_fer2013_iter_20000.caffemodel'
+#MODEL_PATH = 'models_xu/vgg_face16_0_1_2_finetue2w_fer2013_iter_20000.caffemodel'
 #MODEL_PATH = 'models_xu/vgg_face16_finetue2w_fer2013_iter_20000.caffemodel'
 #MODEL_PATH = './good_model/vgg_face16_finetue2w_fer2013_iter_20000.caffemodel'
 SIZE = 250
@@ -57,7 +58,8 @@ def predict(image,the_net):
     return copy.deepcopy(scores)
 
 if __name__=="__main__":
-    f = open("./data/AFEW/AFEW_val_label","rb")
+    #f = open("./data/AFEW/AFEW_val_label","rb")
+    f = open("./data/AFEW/AFEW_FACE/afew_face_val_label","rb")
     f_w = open("pred_fer2013valid.txt","wb")
     net = caffe.Net(MODEL_DEF, MODEL_PATH, caffe.TEST)
     img_label = dict()

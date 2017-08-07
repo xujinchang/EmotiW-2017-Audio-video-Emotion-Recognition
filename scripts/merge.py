@@ -9,7 +9,7 @@ import time
 if __name__=="__main__":
     net1_dir = './result/vgg_16_0_1/'
     net2_dir = "./result/res10/"
-    label_list = ['Angry','Disgust','Fear','Neutral','Surprise','Sad','Happy']
+    label_list = ['Sad','Surprise','Fear','Angry','Disgust','Neutral','Happy']
     val_path = '/home/xujinchang/share/caffe-center-loss/data/AFEW/video_label/val_log/'
     val_file = os.listdir(val_path)
     

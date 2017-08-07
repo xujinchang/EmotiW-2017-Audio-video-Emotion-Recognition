@@ -13,7 +13,7 @@ sys.path.insert(0,'./python')
 import caffe
 
 caffe.set_mode_gpu()
-caffe.set_device(2)
+caffe.set_device(0)
 
 #MODEL_DEF='/home/xujinchang/caffe_liveness/caffe-master/models/bvlc_alexnet/blur_deploy.prototxt'
 #MODEL_DEF = '/home/xujinchang/caffe-blur-pose/models/vgg/deploy_vgg_emo19.prototxt'
@@ -22,7 +22,7 @@ caffe.set_device(2)
 #MODEL_PATH = '../models/vgg_19_finetue_fer2013_iter_30000.caffemodel'
 
 MODEL_DEF = '/home/xujinchang/share/caffe-center-loss/emotiw/vgg/deploy/deploy_vgg_fer16.prototxt'
-MODEL_PATH = './models_xu/vgg_face16_finetue2w_video_iter_20000.caffemodel'
+MODEL_PATH = './models_xu/vgg_face16_0_1_2_finetue2w_fer2013_iter_20000.caffemodel'
 
 mean = np.array((104.0, 117.0, 123.0), dtype=np.float32)
 SIZE = 250
@@ -46,20 +46,19 @@ def predict(the_net,image):
   the_net.reshape()
   the_net.blobs['data'].data[...] = tmp_input
   the_net.forward()
-  scores = copy.deepcopy(the_net.blobs['fc7'].data)
+  scores = copy.deepcopy(the_net.blobs['fc6'].data)
   return scores
 
 if __name__=="__main__":
   path = '/home/xujinchang/share/caffe-center-loss/data/AFEW/train_split/'
   train_list = os.listdir(path)
   start_time = time.time()
+  net = caffe.Net(MODEL_DEF, MODEL_PATH, caffe.TEST)
   for item in train_list:
     f = open(path+item,"rb")
-    fp = open("./vgg16_feature/"+"vgg16_fc7_"+item+".fea","w")
-    fp2 = open("./vgg16_feature/"+item+".fea","w")
-    net = caffe.Net(MODEL_DEF, MODEL_PATH, caffe.TEST)
+    fp = open("./vgg16_feature_fc6/"+"vgg16_fc6_"+item+".fea","w")
+    fp2 = open("./vgg16_feature_fc6/"+item+".fea","w")
 
-    
     X_features=[]
     y_label=[]
     count = 0

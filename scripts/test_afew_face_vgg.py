@@ -17,7 +17,7 @@ import copy
 import pickle
 
 caffe.set_mode_gpu()
-caffe.set_device(3)
+caffe.set_device(2)
 
 #MODEL_DEF = "../deploy/VGG_fc6_deploy.prototxt"
 #MODEL_PATH = "../model/VGG/dan_vgg_iter_50000.caffemodel"
@@ -28,14 +28,20 @@ caffe.set_device(3)
 #MODEL_DEF2 = './deploy_task/depoly_JAN50.prototxt'
 #MODEL_PATH2 = '/home/xujinchang/share/project/transfor_learning/transfer-caffe/model_xu/JAN_res50_iter_100000.caffemodel'
 
-MODEL_DEF = '/home/xujinchang/share/caffe-center-loss/emotiw/afew/resnet/depoly/deploy_res26.prototxt'
-MODEL_PATH = './models_xu/res26_face_video_0_iter_2000.caffemodel'
-#MODEL_PATH = './models_xu/res18_face_fer_iter_36000.caffemodel'
-#MODEL_PATH = './models_xu/res10_face_video_0_iter_30000.caffemodel'
-#MODEL_PATH = './models_xu/res10_face_fer_iter_50000.caffemodel'
+MODEL_DEF = '/home/xujinchang/share/caffe-center-loss/emotiw/vgg/deploy/deploy_vgg_fer16.prototxt'
+#MODEL_PATH = './models_xu/vgg_afew_face16_0_1_2__iter_2000.caffemodel' #official
+MODEL_PATH = 'models_xu/vgg_lbp_face_val1_iter_1200.caffemodel'
+
+#MODEL_PATH = 'models_xu/vgg_afew_face_val1_iter_750.caffemodel'
+#MODEL_PATH = 'models_xu/vgg_face16_0_1_2_finetue2w_fer2013_iter_20000.caffemodel' #our good
+#MODEL_PATH = './models_xu/vgg_afew_face16_0_1_2_single_iter_800.caffemodel'#official
+#MODEL_PATH = 'models_xu/vgg_afew_face16_0_1_2_finetue2w_fer2013_iter_15000.caffemodel'
+#MODEL_PATH = './models_xu/vgg_face19_finetue2w_fer2013_iter_20000.caffemodel'
+#MODEL_PATH = 'models_xu/vgg_face16_0_1_2_finetue2w_fer2013_iter_20000.caffemodel'
+#MODEL_PATH = 'models_xu/vgg_face16_finetue2w_fer2013_iter_20000.caffemodel'
 #MODEL_PATH = './good_model/vgg_face16_finetue2w_fer2013_iter_20000.caffemodel'
-SIZE = 150
-CROP_SIZE = 128
+SIZE = 250
+CROP_SIZE = 224
 
 mean = np.array((104.0, 117.0, 123.0), dtype=np.float32)
 def predict(image,the_net):
@@ -43,7 +49,7 @@ def predict(image,the_net):
     try:
         tmp_input = image
         tmp_input = cv2.resize(tmp_input,(SIZE,SIZE))
-        tmp_input = tmp_input[11:11+128,11:11+128];
+        tmp_input = tmp_input[13:13+224,13:13+224];
         tmp_input = np.subtract(tmp_input,mean)
         tmp_input = tmp_input.transpose((2, 0, 1))
         tmp_input = np.require(tmp_input, dtype=np.float32)
@@ -58,10 +64,10 @@ def predict(image,the_net):
     return copy.deepcopy(scores)
 
 if __name__=="__main__":
-    #f = open("./fer2013/fer2013_valid","rb")
-    #f_w = open("pred_fer2013valid.txt","wb")
-    f = open("./data/AFEW/AFEW_val_label","rb")
-    f_w = open("pred_afew.txt","wb")
+    #f = open("./data/AFEW/AFEW_val_label","rb")
+    #f = open("./correct_lstm/lstm_val_correct.txt","rb")
+    f = open("./data/AFEW/AFEW_TrainVal/official_rest_val.txt","rb")
+    f_w = open("pred_fer2013valid.txt","wb")
     net = caffe.Net(MODEL_DEF, MODEL_PATH, caffe.TEST)
     img_label = dict()
     for line in f.readlines():

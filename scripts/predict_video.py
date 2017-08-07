@@ -48,7 +48,7 @@ def predict(image,the_net):
     return copy.deepcopy(scores)
 
 if __name__=="__main__":
-    label_list = ['Angry','Disgust','Fear','Neutral','Surprise','Sad','Happy']
+    fc8_afew
     val_path = '/home/xujinchang/share/caffe-center-loss/data/AFEW/video_label/val_log/'
     val_file = os.listdir(val_path)
     net1_dir = './result/vgg_16_0_1/'
@@ -79,7 +79,7 @@ if __name__=="__main__":
             cv_img = cv2.imread(img)
             score = predict(cv_img,net)
             scores += score
-            pickle.dump(score, open(net1_dir+video+'/'+img.split("/")[-1], "w"))
+            #pickle.dump(score, open(net1_dir+video+'/'+img.split("/")[-1], "w"))
         if int(scores.argmax(axis=0)) == video_label:
             acc += 1
         print "video_name",video,"predict_label",int(scores.argmax(axis=0)),"label",video_label

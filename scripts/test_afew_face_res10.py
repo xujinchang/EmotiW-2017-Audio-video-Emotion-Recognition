@@ -28,8 +28,8 @@ caffe.set_device(3)
 #MODEL_DEF2 = './deploy_task/depoly_JAN50.prototxt'
 #MODEL_PATH2 = '/home/xujinchang/share/project/transfor_learning/transfer-caffe/model_xu/JAN_res50_iter_100000.caffemodel'
 
-MODEL_DEF = '/home/xujinchang/share/caffe-center-loss/emotiw/afew/resnet/depoly/deploy_res26.prototxt'
-MODEL_PATH = './models_xu/res26_face_video_0_iter_2000.caffemodel'
+MODEL_DEF = '/home/xujinchang/share/caffe-center-loss/emotiw/afew/resnet/depoly/deploy_res10.prototxt'
+MODEL_PATH = './models_xu/res10_afewface_video_single_iter_6400.caffemodel'
 #MODEL_PATH = './models_xu/res18_face_fer_iter_36000.caffemodel'
 #MODEL_PATH = './models_xu/res10_face_video_0_iter_30000.caffemodel'
 #MODEL_PATH = './models_xu/res10_face_fer_iter_50000.caffemodel'
@@ -60,7 +60,8 @@ def predict(image,the_net):
 if __name__=="__main__":
     #f = open("./fer2013/fer2013_valid","rb")
     #f_w = open("pred_fer2013valid.txt","wb")
-    f = open("./data/AFEW/AFEW_val_label","rb")
+    #f = open("./data/AFEW/AFEW_val_label","rb")
+    f = open("afew_face_lstm_single_val.txt","rb")
     f_w = open("pred_afew.txt","wb")
     net = caffe.Net(MODEL_DEF, MODEL_PATH, caffe.TEST)
     img_label = dict()
